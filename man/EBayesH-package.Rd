@@ -8,3 +8,7 @@
 \description{
 This needs some beef for the package help page.
 }
+\author{
+\strong{Maintainer}: Chamberlain Mbah \email{chamberlain.mbah@ugent.be}
+
+}
