@@ -177,6 +177,8 @@
 #' }
 #' ### z-values
 #' Z<-mapply(function(x,y){apply(x,1,zfunc,y)},X,Y)
+#' res<-EBayes(Z, Y, df = 7, breaks = 120)
+#' alpha(res$EB_Delta,res$EB_tauSq,Y,X,170)
 #' }
 #' @export
 
