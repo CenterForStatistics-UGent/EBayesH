@@ -13,15 +13,45 @@ alpha(Delta, tauSq, Y, X, num_Pred)
 
 \item{Y}{list of response variables as explained in \code{EBayes}}
 
-\item{X}{A merge of the orginal predictors values used in computing the z-values.
-The  dataset with response variable as first entry of the list \code{Y} stays ontop
-and the second dataset is that with response variable as second entry of the list \code{Y} and so on.}
+\item{X}{A merge of the orginal predictors values
+used in computing the z-values.
+The  dataset with response variable as first entry
+of the list \code{Y} stays ontop
+and the second dataset is that with response variable as
+second entry of the list \code{Y} and so on.}
 
-\item{num_Pred}{is the number of predictor from which the prediction error is computed.}
+\item{num_Pred}{is the number of predictor from which the
+prediction error is computed.}
+}
+\value{
+\item{alpha_cor_pos}{correlation correted estimate of alpha_+ for each predictor
+added to the linear classifier }
+\item{alpha_cor_neg}{correlation correcd estimate of alpha_- for each predictor
+added to the linear classifier }
+\item{alpha_naive_pos}{naive estimate of alpha_+ for each predictor added to the
+linear classifier }
+\item{alpha_naive_neg}{naive estimate of alpha_- for each predictor added to the
+linear classifier }
 }
 \description{
-\code{alpha} returns  alpha_pos and alpha_neg and their values after correlation
+\code{alpha} returns  alpha_pos and alpha_neg
+and their values after correlation
 correction
+}
+\details{
+Starting from the linear classifier, \code{D}.
+The binary outcome Y is coded as +1 and 1.
+The prediction rule is if D>1 classify subject to
+the group +1 otherwise classify subject to the group -1.
+The misclassification error rates \code{alpha} is
+made up of two parts \code{alpha_+} and \code{alpha_-}
+for which \code{alpha}=\code{alpha_+Pr(Y=+1) + alpha_-Pr(Y=-1)}.
+This function computes estimates of alpha_+ and alpha_- ;
+both the estimated correlated corrected versions of
+\code{alpha_+} and \code{alpha_-} are returned as
+\code{alpha_cor_pos} and \code{alpha_cor_neg}, respectively.
+Their naive versions are also returned \code{alpha_niave_pos}
+and \code{alpha_naive_neg}.
 }
 \examples{
 \dontrun{

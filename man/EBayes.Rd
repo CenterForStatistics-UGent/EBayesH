@@ -15,15 +15,30 @@ The order of the z-values in the columns of  \code{Z} must be maintained.
 That is if the z-values of study  \code{k} are in column  \code{k} of \code{Z},
 then response values of study  \code{k} should be the kth element of the list  \code{Y}.}
 
-\item{df}{is the degrees of freedom of the spline fit used to non-parametrically estimate the marginal density. See
-Efron (2009). We set the default to 7. This will work for most cases.}
+\item{df}{is the degrees of freedom of the spline fit used to non-parametrically
+estimate the marginal density (see Efron (2009)).
+We set the default to 7. This will work for most cases.}
 
-\item{breaks}{are the number of bins used in the spline fit see   Efron (2009).
+\item{breaks}{are the number of bins used in the spline fit (see   Efron (2009)).
 The default is 120 and will also work in most cases if
 the number of predictors is not below 1000.}
 }
+\value{
+\item{EB_Delta}{a vector of empirical Bayes
+estimates of the overall effect sizes for each predictor}
+\item{EB_tauSq}{a vector of variances across studies for each predictor.}
+}
 \description{
 \code{EBayes}  returns empirical Bayes estimates of effect sizes and their variances.
+}
+\details{
+Details are found in Mbah et al. (2018).
+With multiple high-dimensional datasets,
+this function computes empirical Bayes
+estimates of each predictor's overall
+effect size \code{beta}
+which is the ratio between the predictor's
+mean and its between studies variance.
 }
 \examples{
 res <- EBayes(Z,Y)
