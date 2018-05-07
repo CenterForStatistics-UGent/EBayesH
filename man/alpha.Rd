@@ -2,16 +2,16 @@
 % Please edit documentation in R/alpha.R
 \name{alpha}
 \alias{alpha}
-\title{This function computes the misclassification error \code{alpha}.}
+\title{This function computes the misclassification error rataes \code{alpha_+} and  \code{alpha_-}.}
 \usage{
-alpha(Delta, tauSq, Y, X, num_Pred)
+alpha(beta, tauSq, Y, X, num_Pred)
 }
 \arguments{
-\item{Delta}{Empirical Bayes  effect size estimates from \code{EBayes}}
+\item{beta}{Empirical Bayes estimates of the  overall effect variance ratio from \code{EBayes}.}
 
-\item{tauSq}{Empirical Bayes variance estimates from \code{EBayes}}
+\item{tauSq}{Empirical Bayes variance estimates from \code{EBayes}.}
 
-\item{Y}{list of response variables as explained in \code{EBayes}}
+\item{Y}{list of response variables as explained in \code{EBayes}.}
 
 \item{X}{A merge of the orginal predictors values
 used in computing the z-values.
@@ -34,9 +34,9 @@ linear classifier }
 linear classifier }
 }
 \description{
-\code{alpha} returns  alpha_pos and alpha_neg
-and their values after correlation
-correction
+\code{alpha} returns  naive estimates of \code{alpha_+} and \code{apha_-} \code{alpha_naive_pos} and
+\code{alpha_naive_neg}
+and their values after correlation correction.
 }
 \details{
 Starting from the linear classifier, \code{D}.

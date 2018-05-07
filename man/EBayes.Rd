@@ -8,7 +8,7 @@ and their variances across studies.}
 EBayes(Z, Y, df = 7, breaks = 120)
 }
 \arguments{
-\item{Z}{is a matrix with columns containing the z-values  from the different studies}
+\item{Z}{is a matrix with columns containing the z-values  from the different studies.}
 
 \item{Y}{is a list containing the binary response variable for each study.
 The order of the z-values in the columns of  \code{Z} must be maintained.
@@ -24,7 +24,7 @@ The default is 120 and will also work in most cases if
 the number of predictors is not below 1000.}
 }
 \value{
-\item{EB_Delta}{a vector of empirical Bayes
+\item{EB_beta}{a vector of empirical Bayes
 estimates of the overall effect sizes for each predictor}
 \item{EB_tauSq}{a vector of variances across studies for each predictor.}
 }

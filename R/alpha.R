@@ -1,12 +1,12 @@
-#' This function computes the misclassification error \code{alpha}.
+#' This function computes the misclassification error rataes \code{alpha_+} and  \code{alpha_-}.
 #'
-#' \code{alpha} returns  alpha_pos and alpha_neg
-#' and their values after correlation
-#' correction
+#' \code{alpha} returns  naive estimates of \code{alpha_+} and \code{apha_-} \code{alpha_naive_pos} and
+#' \code{alpha_naive_neg}
+#' and their values after correlation correction.
 #'
-#' @param Delta  Empirical Bayes  effect size estimates from \code{EBayes}
-#' @param tauSq  Empirical Bayes variance estimates from \code{EBayes}
-#' @param Y  list of response variables as explained in \code{EBayes}
+#' @param beta  Empirical Bayes estimates of the  overall effect variance ratio from \code{EBayes}.
+#' @param tauSq  Empirical Bayes variance estimates from \code{EBayes}.
+#' @param Y  list of response variables as explained in \code{EBayes}.
 #' @param X  A merge of the orginal predictors values
 #' used in computing the z-values.
 #' The  dataset with response variable as first entry
@@ -210,7 +210,7 @@
 #' and \code{alpha_naive_neg}.
 #' @export
 
-alpha<-function(Delta,tauSq,Y,X,num_Pred)
+alpha<-function(beta,tauSq,Y,X,num_Pred)
 {
   len<-length(X)
   beta_Delta<-((Delta)^2)*(1/tauSq)

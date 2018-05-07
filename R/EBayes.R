@@ -3,7 +3,7 @@
 #'
 #' \code{EBayes}  returns empirical Bayes estimates of effect sizes and their variances.
 #'
-#' @param Z  is a matrix with columns containing the z-values  from the different studies
+#' @param Z  is a matrix with columns containing the z-values  from the different studies.
 #' @param Y is a list containing the binary response variable for each study.
 #'  The order of the z-values in the columns of  \code{Z} must be maintained.
 #'  That is if the z-values of study  \code{k} are in column  \code{k} of \code{Z},
@@ -23,7 +23,7 @@
 #'which is the ratio between the predictor's
 #'mean and its between studies variance.
 #'@return
-#'\item{EB_Delta}{a vector of empirical Bayes
+#'\item{EB_beta}{a vector of empirical Bayes
 #'estimates of the overall effect sizes for each predictor}
 #'\item{EB_tauSq}{a vector of variances across studies for each predictor.}
 #'@examples
@@ -48,7 +48,7 @@ EBayes<-function(Z,Y,df=7,breaks=120)
   dlogm<-apply(Z,2,function(x)logmhat(x,df=df,breaks = breaks)$logmhat)
 
   EB_tauSq<-abs((1/((J-1)*tauSqhat))*rowSums((Deltahat-Z)*dlogm))
-  EB_Delta<-(Deltahat*EB_tauSq)+(1/c_s)*rowSums(dlogm)
+  EB_beta<-(Deltahat*EB_tauSq)+(1/c_s)*rowSums(dlogm)
 
-  list(EB_Delta=EB_Delta,EB_tauSq=EB_tauSq)
+  list(EB_beta=EB_Delta,EB_tauSq=EB_tauSq)
 }
