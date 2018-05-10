@@ -26,6 +26,7 @@
 #'\item{EB_beta}{a vector of empirical Bayes
 #'estimates of the overall effect sizes for each predictor}
 #'\item{EB_tauSq}{a vector of variances across studies for each predictor.}
+#'\item{rho}{}
 #'@examples
 #'res <- EBayes(Z,Y)
 #'head(res)
@@ -50,5 +51,5 @@ EBayes<-function(Z,Y,df=7,breaks=120)
   EB_tauSq<-abs((1/((J-1)*tauSqhat))*rowSums((Deltahat-Z)*dlogm))
   EB_beta<-(Deltahat*EB_tauSq)+(1/c_s)*rowSums(dlogm)
 
-  list(EB_beta=EB_Delta,EB_tauSq=EB_tauSq)
+  list(EB_beta=EB_beta,EB_tauSq=EB_tauSq)
 }

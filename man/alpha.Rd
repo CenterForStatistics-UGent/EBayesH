@@ -131,7 +131,8 @@ rowNames<-rownames(phenoGSE21374@data)
 #See the reject non-reject proportions
 table(phenoGSE21374@data[,"characteristics_ch1.3"])
 #Code rejection status as 0 and 1
-response<-ifelse(phenoGSE21374@data[,"characteristics_ch1.3"]=="rejection/non rejection: nonrej",0,1)
+response<-ifelse(phenoGSE21374@data[,"characteristics_ch1.3"]==
+"rejection/non rejection: nonrej",0,1)
 GSE21374Res<-data.frame(rowNames,response)#Patients and their rejection status
 
 
@@ -140,7 +141,8 @@ phenoGSE36059<-phenoData(gsetGSE36059)
 rowNames<-rownames(phenoGSE36059@data)
 table(phenoGSE36059@data[,"characteristics_ch1"])
 #These patients are not eligible so we take them out
-removeGSE36059<-c(1:length(rowNames))[phenoGSE36059@data[,"characteristics_ch1"]=="diagnosis: Nephrectomy"]
+removeGSE36059<-c(1:length(rowNames))[phenoGSE36059@data[,"characteristics_ch1"]=="
+diagnosis: Nephrectomy"]
 newd=phenoGSE36059@data[,"characteristics_ch1"][-removeGSE36059]
 response<-ifelse(newd== "diagnosis: non-rejecting",0,1)
 table(response)
@@ -154,9 +156,11 @@ rowNames<-rownames(phenoGSE48581@data)
 table(phenoGSE48581@data[,"characteristics_ch1.1"])
 #These patients are not eligible so we take them out
 removeGSE48581<-c(1:length(rowNames))[phenoGSE48581@data[,"characteristics_ch1.1"]
-                                      =="diagnosis (tcmr, abmr, mixed, non-rejecting, nephrectomy): nephrectomy"]
+                                      =="diagnosis (tcmr, abmr, mixed,
+                                       non-rejecting, nephrectomy): nephrectomy"]
 newd=phenoGSE48581@data[,"characteristics_ch1.1"][-removeGSE48581]
-response<-ifelse(newd== "diagnosis (tcmr, abmr, mixed, non-rejecting, nephrectomy): non-rejecting",0,1)
+response<-ifelse(newd== "diagnosis (tcmr, abmr, mixed, non-rejecting,
+nephrectomy): non-rejecting",0,1)
 table(response)
 rowN<-rowNames[-removeGSE48581]
 GSE48581Res<-data.frame(rowN,response)
@@ -166,7 +170,8 @@ sum(table(GSE48581Res[,2]))
 phenoGSE50058<-phenoData(gsetGSE50058)
 rowNames<-rownames(phenoGSE50058@data)
 table(phenoGSE50058@data[,"characteristics_ch1"])
-response<-ifelse(phenoGSE50058@data[,"characteristics_ch1"]=="patient group: stable patient (STA)",0,1)
+response<-ifelse(phenoGSE50058@data[,"characteristics_ch1"]==
+"patient group: stable patient (STA)",0,1)
 GSE50058Res<-data.frame(rowNames,response)
 table(GSE50058Res[,2])
 

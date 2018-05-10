@@ -93,7 +93,8 @@
 #' #See the reject non-reject proportions
 #' table(phenoGSE21374@data[,"characteristics_ch1.3"])
 #' #Code rejection status as 0 and 1
-#' response<-ifelse(phenoGSE21374@data[,"characteristics_ch1.3"]=="rejection/non rejection: nonrej",0,1)
+#' response<-ifelse(phenoGSE21374@data[,"characteristics_ch1.3"]==
+#' "rejection/non rejection: nonrej",0,1)
 #' GSE21374Res<-data.frame(rowNames,response)#Patients and their rejection status
 #'
 #'
@@ -102,7 +103,8 @@
 #' rowNames<-rownames(phenoGSE36059@data)
 #' table(phenoGSE36059@data[,"characteristics_ch1"])
 #' #These patients are not eligible so we take them out
-#' removeGSE36059<-c(1:length(rowNames))[phenoGSE36059@data[,"characteristics_ch1"]=="diagnosis: Nephrectomy"]
+#' removeGSE36059<-c(1:length(rowNames))[phenoGSE36059@data[,"characteristics_ch1"]=="
+#' diagnosis: Nephrectomy"]
 #' newd=phenoGSE36059@data[,"characteristics_ch1"][-removeGSE36059]
 #' response<-ifelse(newd== "diagnosis: non-rejecting",0,1)
 #' table(response)
@@ -116,9 +118,11 @@
 #' table(phenoGSE48581@data[,"characteristics_ch1.1"])
 #' #These patients are not eligible so we take them out
 #' removeGSE48581<-c(1:length(rowNames))[phenoGSE48581@data[,"characteristics_ch1.1"]
-#'                                       =="diagnosis (tcmr, abmr, mixed, non-rejecting, nephrectomy): nephrectomy"]
+#'                                       =="diagnosis (tcmr, abmr, mixed,
+#'                                        non-rejecting, nephrectomy): nephrectomy"]
 #' newd=phenoGSE48581@data[,"characteristics_ch1.1"][-removeGSE48581]
-#' response<-ifelse(newd== "diagnosis (tcmr, abmr, mixed, non-rejecting, nephrectomy): non-rejecting",0,1)
+#' response<-ifelse(newd== "diagnosis (tcmr, abmr, mixed, non-rejecting,
+#' nephrectomy): non-rejecting",0,1)
 #' table(response)
 #' rowN<-rowNames[-removeGSE48581]
 #' GSE48581Res<-data.frame(rowN,response)
@@ -128,7 +132,8 @@
 #' phenoGSE50058<-phenoData(gsetGSE50058)
 #' rowNames<-rownames(phenoGSE50058@data)
 #' table(phenoGSE50058@data[,"characteristics_ch1"])
-#' response<-ifelse(phenoGSE50058@data[,"characteristics_ch1"]=="patient group: stable patient (STA)",0,1)
+#' response<-ifelse(phenoGSE50058@data[,"characteristics_ch1"]==
+#' "patient group: stable patient (STA)",0,1)
 #' GSE50058Res<-data.frame(rowNames,response)
 #' table(GSE50058Res[,2])
 #'
@@ -213,22 +218,24 @@
 alpha<-function(beta,tauSq,Y,X,num_Pred)
 {
   len<-length(X)
-  beta_Delta<-((Delta)^2)*(1/tauSq)
+  beta_Delta<-((beta)^2)*(1/tauSq)
 
-  ord<-rev(order(abs(Delta)))
+  ord<-rev(order(abs(beta)))
 
 
   beta_Delta<-beta_Delta[ord]
-  Delta<-Delta[ord]
+  beta<-beta[ord]
   tauSq<-tauSq[ord]
 
+  priorProbs<-t(sapply(Y,function(x)prop.table(table(x))))
   logOdds<-sapply(Y,function(x)log(table(x)[2]/table(x)[1]))
   all_X<-NULL
   for(j in 1:len)
     all_X<-rbind(all_X,t(X[[j]])[,ord[1:num_Pred]])
 
 
-
+  alpha_cor<-matrix(rep(NA,num_Pred*len),ncol = len)
+  alpha_naive<-matrix(rep(NA,num_Pred*len),ncol = len)
   alpha_naive_pos<-matrix(rep(NA,num_Pred*len),ncol = len)
   alpha_cor_pos<-matrix(rep(NA,num_Pred*len),ncol = len)
 
@@ -253,7 +260,7 @@ alpha<-function(beta,tauSq,Y,X,num_Pred)
       {
         cors<-apply(as.matrix(all_X[,1:amt][,-c(1:ff)]),2,stats::cor,all_X[,ff])
         varTerm<-sqrt(1/tauSq[ff])*sqrt(1/(tauSq[1:amt][-c(1:ff)]))
-        betaTerm<-Delta[ff]*Delta[1:amt][-c(1:ff)]
+        betaTerm<-beta[ff]*beta[1:amt][-c(1:ff)]
         rhos[ff]<-sum(betaTerm*varTerm*cors)
       }
 
@@ -268,11 +275,18 @@ alpha<-function(beta,tauSq,Y,X,num_Pred)
     alpha_cor_pos[amt,]<-stats::pnorm((-logOdds-num)/den_cor)
     alpha_cor_neg[amt,]<-stats::pnorm((logOdds-num)/den_cor)
 
+    alpha_cor[amt,]<-diag(priorProbs%*%rbind(alpha_cor_neg[amt,],alpha_cor_pos[amt,]))
+
     alpha_naive_pos[amt,]<-stats::pnorm((-logOdds-num)/den_naive)
     alpha_naive_neg[amt,]<-stats::pnorm((logOdds-num)/den_naive)
 
+    alpha_naive[amt,]<-diag(priorProbs%*%rbind(alpha_naive_neg[amt,],alpha_naive_pos[amt,]))
+
+
   }
-  list(alpha_cor_pos=alpha_cor_pos,
+  list(alpha_cor=alpha_cor,
+       alpha_naive=alpha_naive,
+       alpha_cor_pos=alpha_cor_pos,
        alpha_cor_neg=alpha_cor_neg,
        alpha_naive_pos=alpha_naive_pos,
        alpha_naive_neg=alpha_naive_neg,

@@ -27,6 +27,7 @@ the number of predictors is not below 1000.}
 \item{EB_beta}{a vector of empirical Bayes
 estimates of the overall effect sizes for each predictor}
 \item{EB_tauSq}{a vector of variances across studies for each predictor.}
+\item{rho}{}
 }
 \description{
 \code{EBayes}  returns empirical Bayes estimates of effect sizes and their variances.
