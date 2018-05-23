@@ -6,13 +6,9 @@
 #'
 #' @param beta  Empirical Bayes estimates of the  overall effect variance ratio from \code{EBayes}.
 #' @param tauSq  Empirical Bayes variance estimates from \code{EBayes}.
-#' @param Y  list of response variables as explained in \code{EBayes}.
+#' @param cost  list of cost probabilities, each element of the list should contain two values: p+ and p- that sum up to 1.
 #' @param X  A merge of the orginal predictors values
 #' used in computing the z-values.
-#' The  dataset with response variable as first entry
-#' of the list \code{Y} stays ontop
-#' and the second dataset is that with response variable as
-#' second entry of the list \code{Y} and so on.
 #' @param num_Pred is the number of predictor from which the
 #' prediction error is computed.
 #' @examples
@@ -185,12 +181,12 @@
 #'     t(x)
 #'   })
 #' }
-#' ### z-values
-#' Z<-mapply(function(x,y){apply(x,1,zfunc,y)},X,Y)
 #' res<-EBayes(Z, Y, df = 7, breaks = 120)
-#' alpha(res$EB_Delta,res$EB_tauSq,Y,X,170)
+#' cost<-list(c(0.5,0.5),c(0.2,0.8))
+#' alpha(res$EB_Delta,res$EB_tauSq,cost,X,170)
 #' }
 #' @return
+#' \item{predictorsID}{Ordered list of the predictors as they entered the linear classifier}
 #' \item{alpha_cor_pos}{correlation correted estimate of alpha_+ for each predictor
 #' added to the linear classifier }
 #' \item{alpha_cor_neg}{correlation correcd estimate of alpha_- for each predictor
@@ -202,22 +198,25 @@
 #' @details
 #' Starting from the linear classifier, \code{D}.
 #' The binary outcome Y is coded as +1 and 1.
-#' The prediction rule is if D>1 classify subject to
+#' The prediction rule is: if D>1 classify subject to
 #' the group +1 otherwise classify subject to the group -1.
 #' The misclassification error rates \code{alpha} is
 #' made up of two parts \code{alpha_+} and \code{alpha_-}
 #' for which \code{alpha}=\code{alpha_+Pr(Y=+1) + alpha_-Pr(Y=-1)}.
+#' The user can replace  p+=Pr(Y=+1) and p-=Pr(Y=-1) with any cost probabilies of their choice.
+#' Provided (p+)+(p-)=1.
 #' This function computes estimates of alpha_+ and alpha_- ;
 #' both the estimated correlated corrected versions of
 #' \code{alpha_+} and \code{alpha_-} are returned as
 #' \code{alpha_cor_pos} and \code{alpha_cor_neg}, respectively.
-#' Their naive versions are also returned \code{alpha_niave_pos}
+#' Their naive (that do not take correlations into account) versions are also returned \code{alpha_niave_pos}
 #' and \code{alpha_naive_neg}.
 #' @export
 
-alpha<-function(beta,tauSq,Y,X,num_Pred)
+alpha<-function(beta,tauSq,cost,X,num_Pred)
 {
   len<-length(X)
+  len2<-length(cost)
   beta_Delta<-((beta)^2)*(1/tauSq)
 
   ord<-rev(order(abs(beta)))
@@ -227,20 +226,22 @@ alpha<-function(beta,tauSq,Y,X,num_Pred)
   beta<-beta[ord]
   tauSq<-tauSq[ord]
 
-  priorProbs<-t(sapply(Y,function(x)prop.table(table(x))))
-  logOdds<-sapply(Y,function(x)log(table(x)[2]/table(x)[1]))
+  if(typeof(cost)!="list")
+    stop("cost must be a list")
+  priorProbs<-as.numeric(unlist(cost))
+  logOdds<-sapply(cost,function(x)x[1]/x[2])
   all_X<-NULL
   for(j in 1:len)
     all_X<-rbind(all_X,t(X[[j]])[,ord[1:num_Pred]])
 
 
-  alpha_cor<-matrix(rep(NA,num_Pred*len),ncol = len)
-  alpha_naive<-matrix(rep(NA,num_Pred*len),ncol = len)
-  alpha_naive_pos<-matrix(rep(NA,num_Pred*len),ncol = len)
-  alpha_cor_pos<-matrix(rep(NA,num_Pred*len),ncol = len)
+  alpha_cor<-matrix(rep(NA,num_Pred*len2),ncol = len2)
+  alpha_naive<-matrix(rep(NA,num_Pred*len2),ncol = len2)
+  alpha_naive_pos<-matrix(rep(NA,num_Pred*len2),ncol = len2)
+  alpha_cor_pos<-matrix(rep(NA,num_Pred*len2),ncol = len2)
 
-  alpha_naive_neg<-matrix(rep(NA,num_Pred*len),ncol = len)
-  alpha_cor_neg<-matrix(rep(NA,num_Pred*len),ncol = len)
+  alpha_naive_neg<-matrix(rep(NA,num_Pred*len2),ncol = len2)
+  alpha_cor_neg<-matrix(rep(NA,num_Pred*len2),ncol = len2)
 
 
 
@@ -282,9 +283,10 @@ alpha<-function(beta,tauSq,Y,X,num_Pred)
 
     alpha_naive[amt,]<-diag(priorProbs%*%rbind(alpha_naive_neg[amt,],alpha_naive_pos[amt,]))
 
-
+   predictorsID<-names(beta_Delta)
   }
-  list(alpha_cor=alpha_cor,
+  list(predictorsID=predictorsID[1:num_Pred],
+       alpha_cor=alpha_cor,
        alpha_naive=alpha_naive,
        alpha_cor_pos=alpha_cor_pos,
        alpha_cor_neg=alpha_cor_neg,

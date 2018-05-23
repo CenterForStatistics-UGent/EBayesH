@@ -8,16 +8,18 @@ and their variances across studies.}
 EBayes(Z, Y, df = 7, breaks = 120)
 }
 \arguments{
-\item{Z}{is a matrix with columns containing the z-values  from the different studies.}
+\item{Z}{is a matrix with columns containing the z-values for each predictor  from the different studies.
+the dimension of Z should be "number of predictors by number of studies"}
 
-\item{Y}{is a list containing the binary response variable for each study.
-The order of the z-values in the columns of  \code{Z} must be maintained.
-That is if the z-values of study  \code{k} are in column  \code{k} of \code{Z},
-then response values of study  \code{k} should be the kth element of the list  \code{Y}.}
+\item{Y}{is a list containing the binary response variables for each study. Each element of the list
+should be of length equal to the number of obsersation in each study.
+ The order of the z-values in the columns of  \code{Z} must be maintained.
+ That is if the z-values of study  \code{k} are in column  \code{k} of \code{Z},
+ then response values of study  \code{k} should be the kth element of the list  \code{Y}.}
 
 \item{df}{is the degrees of freedom of the spline fit used to non-parametrically
 estimate the marginal density (see Efron (2009)).
-We set the default to 7. This will work for most cases.}
+The default value is  df=7. This will work in  most cases.}
 
 \item{breaks}{are the number of bins used in the spline fit (see   Efron (2009)).
 The default is 120 and will also work in most cases if
@@ -25,9 +27,8 @@ the number of predictors is not below 1000.}
 }
 \value{
 \item{EB_beta}{a vector of empirical Bayes
-estimates of the overall effect sizes for each predictor}
+estimates of  predictor effects}
 \item{EB_tauSq}{a vector of variances across studies for each predictor.}
-\item{rho}{}
 }
 \description{
 \code{EBayes}  returns empirical Bayes estimates of effect sizes and their variances.
@@ -39,7 +40,8 @@ this function computes empirical Bayes
 estimates of each predictor's overall
 effect size \code{beta}
 which is the ratio between the predictor's
-mean and its between studies variance.
+mean and its between studies variance.  It also computes the predictor variances across studies (heterogeneity).
+The predictor effect sizes can then be used in a linear prediction rule.
 }
 \examples{
 res <- EBayes(Z,Y)

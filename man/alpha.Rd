@@ -4,26 +4,23 @@
 \alias{alpha}
 \title{This function computes the misclassification error rataes \code{alpha_+} and  \code{alpha_-}.}
 \usage{
-alpha(beta, tauSq, Y, X, num_Pred)
+alpha(beta, tauSq, cost, X, num_Pred)
 }
 \arguments{
 \item{beta}{Empirical Bayes estimates of the  overall effect variance ratio from \code{EBayes}.}
 
 \item{tauSq}{Empirical Bayes variance estimates from \code{EBayes}.}
 
-\item{Y}{list of response variables as explained in \code{EBayes}.}
+\item{cost}{list of cost probabilities, each element of the list should contain two values: p+ and p- that sum up to 1.}
 
 \item{X}{A merge of the orginal predictors values
-used in computing the z-values.
-The  dataset with response variable as first entry
-of the list \code{Y} stays ontop
-and the second dataset is that with response variable as
-second entry of the list \code{Y} and so on.}
+used in computing the z-values.}
 
 \item{num_Pred}{is the number of predictor from which the
 prediction error is computed.}
 }
 \value{
+\item{predictorsID}{Ordered list of the predictors as they entered the linear classifier}
 \item{alpha_cor_pos}{correlation correted estimate of alpha_+ for each predictor
 added to the linear classifier }
 \item{alpha_cor_neg}{correlation correcd estimate of alpha_- for each predictor
@@ -41,16 +38,18 @@ and their values after correlation correction.
 \details{
 Starting from the linear classifier, \code{D}.
 The binary outcome Y is coded as +1 and 1.
-The prediction rule is if D>1 classify subject to
+The prediction rule is: if D>1 classify subject to
 the group +1 otherwise classify subject to the group -1.
 The misclassification error rates \code{alpha} is
 made up of two parts \code{alpha_+} and \code{alpha_-}
 for which \code{alpha}=\code{alpha_+Pr(Y=+1) + alpha_-Pr(Y=-1)}.
+The user can replace  p+=Pr(Y=+1) and p-=Pr(Y=-1) with any cost probabilies of their choice.
+Provided (p+)+(p-)=1.
 This function computes estimates of alpha_+ and alpha_- ;
 both the estimated correlated corrected versions of
 \code{alpha_+} and \code{alpha_-} are returned as
 \code{alpha_cor_pos} and \code{alpha_cor_neg}, respectively.
-Their naive versions are also returned \code{alpha_niave_pos}
+Their naive (that do not take correlations into account) versions are also returned \code{alpha_niave_pos}
 and \code{alpha_naive_neg}.
 }
 \examples{
@@ -223,9 +222,8 @@ for(i in 1:2)
     t(x)
   })
 }
-### z-values
-Z<-mapply(function(x,y){apply(x,1,zfunc,y)},X,Y)
 res<-EBayes(Z, Y, df = 7, breaks = 120)
-alpha(res$EB_Delta,res$EB_tauSq,Y,X,170)
+cost<-list(c(0.5,0.5),c(0.2,0.8))
+alpha(res$EB_Delta,res$EB_tauSq,cost,X,170)
 }
 }
