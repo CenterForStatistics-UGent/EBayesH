@@ -183,7 +183,7 @@
 #' }
 #' res<-EBayes(Z, Y, df = 7, breaks = 120)
 #' cost<-list(c(0.5,0.5),c(0.2,0.8))
-#' alpha(res$EB_Delta,res$EB_tauSq,cost,X,170)
+#' alpha(res$EB_beta,res$EB_tauSq,cost,X,170)
 #' }
 #' @return
 #' \item{predictorsID}{Ordered list of the predictors as they entered the linear classifier}
