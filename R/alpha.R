@@ -15,6 +15,7 @@
 #' \dontrun{
 #'### Download the datasets from GEO####
 #'
+#'library(GEOquery)
 #'gseNo.<-"GSE21374"
 #'gset <- getGEO(gseNo., GSEMatrix =TRUE, getGPL=FALSE)
 #'if (length(gset) > 1) idx <- grep("GPL570", attr(gset, "names")) else idx <- 1
