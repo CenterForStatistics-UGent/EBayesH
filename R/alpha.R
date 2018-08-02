@@ -21,7 +21,7 @@
 #'if (length(gset) > 1) idx <- grep("GPL570", attr(gset, "names")) else idx <- 1
 #'gset <- gset[[idx]]
 #'
-#'file<-paste(getwd(),"gset",gseNo.,".rda",sep="")
+#'file<-paste(getwd(),"/gset",gseNo.,".rda",sep="")
 #'save(gset,file=file)
 #'
 #'gseNo.<-"GSE36059"
@@ -29,7 +29,7 @@
 #'if (length(gset) > 1) idx <- grep("GPL570", attr(gset, "names")) else idx <- 1
 #'gset <- gset[[idx]]
 #'
-#'file<-paste(getwd(),"gset",gseNo.,".rda",sep="")
+#'file<-paste(getwd(),"/gset",gseNo.,".rda",sep="")
 #'save(gset,file=file)
 #'
 #'gseNo.<-"GSE48581"
@@ -37,7 +37,7 @@
 #'if (length(gset) > 1) idx <- grep("GPL570", attr(gset, "names")) else idx <- 1
 #'gset <- gset[[idx]]
 #'
-#'file<-paste(getwd(),"gset",gseNo.,".rda",sep="")
+#'file<-paste(getwd(),"/gset",gseNo.,".rda",sep="")
 #'save(gset,file=file)
 #'
 #'gseNo.<-"GSE50058"
@@ -45,7 +45,7 @@
 #'if (length(gset) > 1) idx <- grep("GPL570", attr(gset, "names")) else idx <- 1
 #'gset <- gset[[idx]]
 #'
-#'file<-paste(getwd(),"gset",gseNo.,".rda",sep="")
+#'file<-paste(getwd(),"/gset",gseNo.,".rda",sep="")
 #'save(gset,file=file)
 #'
 #'
