@@ -3,3 +3,4 @@
 export(EBayes)
 export(alpha)
 export(transFunc)
+export(zfunc)
