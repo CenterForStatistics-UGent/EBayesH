@@ -1,3 +1,4 @@
+#' @export
 ### log2 transformation of the gene expressions data
 transFunc=function(x){
   # log2 transform automatically
