@@ -2,3 +2,4 @@
 
 export(EBayes)
 export(alpha)
+export(transFunc)
